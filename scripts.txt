@@ -1,0 +1,7 @@
+npm install --save @nestjs/mapped-types
+
+npm install --save @nestjs/jwt
+
+npm install --save class-transformer class-validator
+
+npm install --save bcryptjs
