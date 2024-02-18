@@ -71,6 +71,8 @@ values
 );
 
 
+----------------------------------------- Second Module Users -------------------------------------------
+
 -- Making table user for save users into system database
 
 CREATE TABLE "user" (
@@ -87,12 +89,72 @@ CREATE TABLE "user" (
 );
 
 
+----------------------------------------------------- Third Module: Products ----------------------------------------------------
 
+create table public.category (
+	id serial primary key not null,
+	name character varying(30) not null,
+	description text,
+	active boolean default true not null
+);
+
+INSERT INTO public.category (name, description, active)
+VALUES 
+('Categoria ejemplo', 'Esta es una categoría de ejemplo', true);
+
+
+create table public.type (
+	id serial primary key not null,
+	name character varying(30) not null,
+	description text,
+	active boolean default true not null
+);
+INSERT INTO public.type (name, description, active)
+VALUES 
+('Tipo ejemplo', 'Este es un tipo de producto de ejemplo', true);
+
+
+create table public.product 
+(
+	id serial primary key not null,
+	name character varying(100) not null,
+	description text, 
+	price float not null,
+	stock int not null,
+	characteristics text,
+	is_offer boolean default false not null,
+	date_creation timestamp not null,
+	last_modify timestamp,
+	id_type int,
+	id_category int,
+	id_last_modifier int,
+	foreign key (id_type) references type(id),
+	foreign key (id_category) references category(id),
+	foreign key (id_last_modifier) references "user"(id)
+);
+
+
+INSERT INTO public.product (name, description, price, stock, characteristics, is_offer, date_creation, id_type, id_category, id_last_modifier)
+VALUES 
+('Producto de ejemplo',
+ 'Este es un producto de ejemplo',
+ 25.99,
+ 100, 
+ '{properties: {Color: Rojo, Tamaño: Pequeño, talla: "xl"}, version: 2.0}', 
+ false, 
+ CURRENT_TIMESTAMP,
+ 1,
+ 1,
+ 1);
+
+delete from product
 -- Created tables now
 select * from module
 select * from controller
 select * from action
 select * from "user"
-
+select * from category
+select * from type
+select * from product
 
 
