@@ -16,7 +16,7 @@ import { UsersModule} from './modules/users/users.module';
       synchronize: true, //se borra en produccion
     }),
     AuthModule,
-    UsersModule
+    UsersModule,
   ],
   controllers: [],
   providers: [],
