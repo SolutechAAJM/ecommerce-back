@@ -147,7 +147,29 @@ VALUES
  1,
  1);
 
-delete from product
+------------------------------------------- fourth Module: BUYS ------------------------------------------
+
+-- Making table for save the posibles prders status 
+
+create table public.purchasestatus
+(
+	id serial primary key not null,
+	name character varying(50) not null,
+	description text
+);
+
+insert into public.purchasestatus (name, description)
+values 
+('Pendiente', 'La compra se realizo y falta hacer el despacho'), 
+('En camino', 'El pedido se entrego a la empresarepartidora');
+
+
+create table order 
+(
+	id serial primary key not null, 
+	order_date timestamp,
+	id_user
+);
 -- Created tables now
 select * from module
 select * from controller
@@ -156,5 +178,6 @@ select * from "user"
 select * from category
 select * from type
 select * from product
+select * from purchasestatus
 
 
