@@ -1,5 +1,13 @@
---Making table modules for create permisions 
+-- database: pgsql
+-- Software: Ecommerce Solutech
+-- Database version: 1.0.0
+-- Date: 17/02/2024
+-- Writer: maicol.alvarez
 
+--First Module "Permissions"
+
+
+--Making table modules for create permisions 
 CREATE TABLE public.module (
     id serial primary key not null,
     name varchar(30) NOT NULL,
@@ -63,9 +71,28 @@ values
 );
 
 
+-- Making table user for save users into system database
 
+CREATE TABLE "user" (
+  id SERIAL PRIMARY KEY,
+  fullname VARCHAR(50),
+  email VARCHAR(30),
+  password VARCHAR(30),
+  role varchar(40),
+	createdAt date,
+	address varchar(50),
+	phone varchar(20),
+	creditPoints int,
+	isActive bool
+);
+
+
+
+-- Created tables now
 select * from module
 select * from controller
 select * from action
+select * from "user"
+
 
 
