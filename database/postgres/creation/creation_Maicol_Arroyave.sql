@@ -11,7 +11,7 @@
 CREATE TABLE public.module (
     id serial primary key not null,
     name varchar(30) NOT NULL,
-    permision_name text NOT NULL,
+    permisionName text NOT NULL,
     description text
 );
 
@@ -20,10 +20,10 @@ CREATE TABLE public.module (
 
 CREATE TABLE public.controller (
     id serial primary key not null,
-    idmodule integer NOT NULL,
+    idModule integer NOT NULL,
     name character varying(50) NOT NULL,
     description text,
-    permision_name text,
+    permisionName text,
     active boolean DEFAULT true NOT NULL,
 	foreign key (idmodule) references public.module(id)
 );
@@ -33,18 +33,18 @@ CREATE TABLE public.controller (
 
 CREATE TABLE public.action (
     id serial primary key  NOT NULL,
-    idcontroller integer NOT NULL,
+    idController integer NOT NULL,
     name character varying(250) NOT NULL,
-    permision_name text NOT NULL,
+    permisionName text NOT NULL,
     description text,
     active boolean DEFAULT true NOT NULL,
     editable boolean DEFAULT false NOT NULL,
-    foreign key (idcontroller) references public.controller(id)
+    foreign key (idController) references public.controller(id)
 );	
 
 INSERT INTO module 
 (
-	name, permision_name, description
+	name, permisionName, description
 )
 values 
 (
@@ -53,7 +53,7 @@ values
 
 INSERT INTO controller 
 (
-	idmodule, name, description, permision_name, active 
+	idmodule, name, description, permisionName, active 
 )
 values 
 (
@@ -63,7 +63,7 @@ values
 
 INSERT INTO action 
 (
-	idcontroller, name, description, permision_name, active, editable
+	idController, name, description, permisionName, active, editable
 )
 values 
 (
@@ -77,7 +77,7 @@ values
 
 CREATE TABLE "user" (
   id SERIAL PRIMARY KEY,
-  fullname VARCHAR(50),
+  fullName VARCHAR(50),
   email VARCHAR(30),
   password VARCHAR(30),
   role varchar(40),
@@ -88,6 +88,11 @@ CREATE TABLE "user" (
 	isActive bool
 );
 
+
+insert into "user" (fullName, email, password, role, createdAt, address, phone, creditPoints, isActive)
+values
+('Maicol Arroyave', 'maicolaroyave10@gmail.com', 'mmdmsmdsm20002sd', 'Admin', '2023-12-01', 'Carrera 77 #20-12', '31223232', 100, true  ),
+('Maicol Arroyave', 'maicolaroyave10@gmail.com', 'mmdmsmdsm20002sd', 'Admin', '2023-12-01', 'Carrera 77 #20-12', '31223232', 100, true  );
 
 ----------------------------------------------------- Third Module: Products ----------------------------------------------------
 
@@ -122,19 +127,19 @@ create table public.product
 	price float not null,
 	stock int not null,
 	characteristics text,
-	is_offer boolean default false not null,
-	date_creation timestamp not null,
-	last_modify timestamp,
-	id_type int,
-	id_category int,
-	id_last_modifier int,
-	foreign key (id_type) references type(id),
-	foreign key (id_category) references category(id),
-	foreign key (id_last_modifier) references "user"(id)
+	isOffer boolean default false not null,
+	dateCreation timestamp not null,
+	lastModify timestamp,
+	idType int,
+	idCategory int,
+	idLastModifier int,
+	foreign key (idType) references type(id),
+	foreign key (idCategory) references category(id),
+	foreign key (idLastModifier) references "user"(id)
 );
 
 
-INSERT INTO public.product (name, description, price, stock, characteristics, is_offer, date_creation, id_type, id_category, id_last_modifier)
+INSERT INTO public.product (name, description, price, stock, characteristics, isOffer, dateCreation, idType, idCategory, idLastModifier)
 VALUES 
 ('Producto de ejemplo',
  'Este es un producto de ejemplo',
@@ -149,35 +154,84 @@ VALUES
 
 ------------------------------------------- fourth Module: BUYS ------------------------------------------
 
--- Making table for save the posibles prders status 
+-- Making table for save the posibles orders status 
 
-create table public.purchasestatus
+create table public.orderstatus
 (
 	id serial primary key not null,
 	name character varying(50) not null,
 	description text
 );
 
-insert into public.purchasestatus (name, description)
+insert into public.orderstatus (name, description)
 values 
 ('Pendiente', 'La compra se realizo y falta hacer el despacho'), 
 ('En camino', 'El pedido se entrego a la empresarepartidora');
 
 
-create table order 
+------- Making tables what save orders into database -
+
+create table "order" 
 (
 	id serial primary key not null, 
-	order_date timestamp,
-	id_user
+	orderDate timestamp,
+	addressShipment text,
+	description text,
+	idSpitful int not null,
+	idUser int not null,
+	idOrderStatus int not null,
+	foreign key (idSpitful) references "user" (id),
+	foreign key (idUser) references "user" (id),
+	foreign key (idOrderStatus) references orderstatus(id)
 );
--- Created tables now
-select * from module
-select * from controller
-select * from action
-select * from "user"
-select * from category
-select * from type
-select * from product
-select * from purchasestatus
+
+insert into "order" (orderDate, addressShipment, description, idSpitful, idUser, idOrderStatus)
+values
+('2024-12-1', 'Carrera 77 #88a- 79', 'Piso 1', 1, 2, 1);
+
+create table public.orderdetails
+(
+	id serial primary key not null,
+	idOrder int not null,
+	idProduct int not null,
+	unitPrice float,
+	quantity decimal (3,2),
+	discount float,
+	foreign key (idOrder) references "order"(id),
+	foreign key (idProduct) references product(id)
+	
+);
+
+
+insert into orderdetails (idOrder, idProduct, unitPrice, quantity, discount )
+values
+(1, 1, 9100, 2, 0.20 );
+
+-- -- Created tables now
+-- select * from module
+-- select * from controller
+-- select * from action
+-- select * from "user"
+-- select * from category
+-- select * from type
+-- select * from product
+-- select * from orderstatus
+-- select * from "order"
+-- select * from orderdetails
+
+
+---- here we can remove tables from database with this same orden ----
+
+-- drop table action
+-- drop table controller
+-- drop table module
+-- drop table orderdetails
+-- drop table product
+-- drop table type
+-- drop table category
+-- drop table "order"
+-- drop table orderstatus
+-- drop table "user"
+
 
 
