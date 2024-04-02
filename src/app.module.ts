@@ -13,7 +13,7 @@ import { UsersModule} from './modules/users/users.module';
       password: 'gatostem123',
       database: 'pdo',
       autoLoadEntities: true,
-      synchronize: true, //se borra en produccion
+      synchronize: true, 
     }),
     AuthModule,
     UsersModule,
