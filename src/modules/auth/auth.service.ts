@@ -9,6 +9,8 @@ import { RegisterDto } from './dto/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcryptjs from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
+import { getLanguageMessagesApp } from 'src/config';
+import { getMessages } from './constants/jwt.constant';
 
 @Injectable()
 export class AuthService {
@@ -17,11 +19,14 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  private languageModule: string = getLanguageMessagesApp();
+  private messages = getMessages(this.languageModule);
+
   async register({ fullname, email, password, createdAt, address, phone, isActive }: RegisterDto) {
     const user = await this.usersService.findOneByEmail(email);
 
     if (user) {
-      throw new BadRequestException('User already exists');
+      throw new BadRequestException(this.messages.useralreadyexist);
     }
 
     await this.usersService.create({
