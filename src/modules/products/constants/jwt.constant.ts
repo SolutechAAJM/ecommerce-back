@@ -3,17 +3,17 @@ export const jwtConstants = {
 
 
   outputEnglishMessages:{
-    useralreadyexist: 'User already exists',
-
+    productNotFound: 'Product not found',
+    updateProductError: 'Error al actualizar el producto',
   },
 
   outputSpanishMessages:{
-    useralreadyexist: 'El usuario ya existe!',
-
+    productNotFound: 'Producto no encontrado',
+    updateProductError: 'Error updating product',
   }
 };
 
 
-// export const getMessages = (language) => {
-//   return (language == 'english')? jwtConstants.outputEnglishMessages: jwtConstants.outputSpanishMessages;
-// }
+export const getMessages = (language: string) => {
+  return (language == 'english')? jwtConstants.outputEnglishMessages: jwtConstants.outputSpanishMessages;
+}
