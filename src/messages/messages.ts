@@ -1,4 +1,4 @@
-import { getLanguageMessagesApp } from "src/config";
+import { getLanguageApp } from "src/config";
 
 export const messages = {
     outputEnglishMessages: {
@@ -37,7 +37,7 @@ export const messages = {
 
 
 export const getMessages = () => {
-    const languageModule: string = getLanguageMessagesApp();
+    const languageModule: string = getLanguageApp();
     return (languageModule == 'english')? messages.outputEnglishMessages: messages.outputSpanishMessages;
 }
   

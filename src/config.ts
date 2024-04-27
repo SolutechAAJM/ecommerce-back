@@ -11,7 +11,5 @@ export const getLanguageApp = () => {
     return config.language;
 }
 
-export const getLanguageMessagesApp = () => {
-    return (config.language == 'english') ? 'outputEnglishMessages': 'outputSpanishMessages';
-}
+
 
