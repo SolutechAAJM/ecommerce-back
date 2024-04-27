@@ -1,40 +1,38 @@
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Role } from '../../common/enums/rol.enum';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Product } from 'src/modules/products/entities/product.entity';
 
-@Entity()
+@Entity('user')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({nullable:false})
-  fullname: string;
+  @Column({ length: 50, nullable: false })
+  fullName: string;
 
-  @Column({ unique: true, nullable: false })
+  @Column({ length: 30, nullable: false })
   email: string;
 
-  @Column({ nullable: false, select: false })
+  @Column({ length: 300, nullable: false })
   password: string;
 
-  @Column({ type: 'enum', default: Role.USER, enum: Role, nullable:false })
-  role: Role;
+  @Column({ length: 40, nullable: false })
+  role: string;
 
-  @Column({nullable: false})
-  creditPoints: number;
-
-  @Column({nullable:false})
-  address: string;
-
-  @Column({nullable:false})
-  phone: string;
-
-  @Column({nullable:false})
+  @Column({ type: 'timestamp', nullable: false })
   createdAt: Date;
 
-  @Column({nullable:false})
+  @Column({ length: 50, nullable: false })
+  address: string;
+
+  @Column({ length: 20, nullable: false })
+  phone: string;
+
+  @Column({ nullable: false })
+  creditPoints: number;
+
+  @Column({ nullable: false })
   isActive: boolean;
+
+  @OneToMany(() => Product, product => product.user)  
+  products: Product[];
 }

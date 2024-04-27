@@ -22,7 +22,7 @@ export class ProductService {
   }
 
 
-  async update({id, name,description, price, stock, characteristics, isOffer,dateCreation, lastModify, idType, idCategory,idLastModifier }: updateProductDTO): Promise<Product> {
+  async update({id, name,description, price, stock, characteristics, isOffer,dateCreation, lastModify, typeId, categoryId,userId }: updateProductDTO): Promise<Product> {
     const existingProduct = await this.productRepository.findOne({
       where: {id},
       select: ['id'],
@@ -44,9 +44,9 @@ export class ProductService {
         isOffer,
         dateCreation,
         lastModify,
-        idType,
-        idCategory,
-        idLastModifier
+        typeId,
+        categoryId,
+        userId
       }
     );
 

@@ -23,7 +23,7 @@ export class UsersService {
   findByEmailWithPassword(email: string) {
     return this.userRepository.findOne({
       where: { email },
-      select: ['id', 'fullname', 'email', 'password', 'role'],
+      select: ['id', 'fullName', 'email', 'password', 'role'],
     });
   }
 

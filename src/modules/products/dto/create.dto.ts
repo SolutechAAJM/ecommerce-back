@@ -33,13 +33,13 @@ export class createProductDTO {
 
   @IsNotEmpty()
   @IsNumber()
-  idType: number;
+  typeId: number;
 
   @IsNotEmpty()
   @IsNumber()
-  idCategory: number;
+  categoryId: number;
 
   @IsNotEmpty()
   @IsNumber()
-  idLastModifier: number;
+  userId: number;
 }

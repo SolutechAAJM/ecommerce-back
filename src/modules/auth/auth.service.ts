@@ -22,7 +22,7 @@ export class AuthService {
 
   private messages = getMessages();
 
-  async register({ fullname, email, password, createdAt, address, phone, isActive, creditPoints}: RegisterDto) {
+  async register({ fullName, email, password, createdAt, address, phone, isActive, creditPoints, role}: RegisterDto) {
     const user = await this.usersService.findOneByEmail(email);
 
     if (user) {
@@ -30,7 +30,7 @@ export class AuthService {
     }
 
     await this.usersService.create({
-      fullname,
+      fullName,
       email,
       password: await bcryptjs.hash(password, 10),
       createdAt: createdAt,
@@ -38,10 +38,11 @@ export class AuthService {
       phone: phone,
       isActive: isActive,
       creditPoints: creditPoints,
+      role: role,
     });
 
     return {
-      fullname,
+      fullName,
       email,
     };
   }

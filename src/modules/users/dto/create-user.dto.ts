@@ -1,10 +1,11 @@
 export class CreateUserDto {
   email: string;
   password: string;
-  fullname?: string;
+  fullName?: string;
   createdAt?: Date;
   address?: string;
   phone?: string;
   isActive: boolean;
   creditPoints: number;
+  role: string;
 }
