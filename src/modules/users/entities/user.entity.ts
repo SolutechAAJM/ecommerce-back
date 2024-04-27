@@ -11,7 +11,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({nullable:false})
   fullname: string;
 
   @Column({ unique: true, nullable: false })
@@ -20,21 +20,21 @@ export class User {
   @Column({ nullable: false, select: false })
   password: string;
 
-  @Column({ type: 'enum', default: Role.USER, enum: Role })
+  @Column({ type: 'enum', default: Role.USER, enum: Role, nullable:false })
   role: Role;
 
-  @Column({nullable: true})
+  @Column({nullable: false})
   creditPoints: number;
 
-  @Column()
+  @Column({nullable:false})
   address: string;
 
-  @Column({nullable:true})
+  @Column({nullable:false})
   phone: string;
 
-  @Column()
+  @Column({nullable:false})
   createdAt: Date;
 
-  @Column()
+  @Column({nullable:false})
   isActive: boolean;
 }

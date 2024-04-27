@@ -6,4 +6,5 @@ export class CreateUserDto {
   address?: string;
   phone?: string;
   isActive: boolean;
+  creditPoints: number;
 }

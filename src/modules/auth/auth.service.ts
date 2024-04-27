@@ -3,14 +3,15 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 
 import { JwtService } from '@nestjs/jwt';
 import * as bcryptjs from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
-import { getLanguageMessagesApp } from 'src/config';
-import { getMessages } from './constants/jwt.constant';
+
+import { getMessages } from 'src/messages/messages';
 
 @Injectable()
 export class AuthService {
@@ -19,14 +20,13 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private languageModule: string = getLanguageMessagesApp();
-  private messages = getMessages(this.languageModule);
+  private messages = getMessages();
 
-  async register({ fullname, email, password, createdAt, address, phone, isActive }: RegisterDto) {
+  async register({ fullname, email, password, createdAt, address, phone, isActive, creditPoints}: RegisterDto) {
     const user = await this.usersService.findOneByEmail(email);
 
     if (user) {
-      throw new BadRequestException(this.messages.useralreadyexist);
+      throw new BadRequestException(this.messages.userAlreadyExist);
     }
 
     await this.usersService.create({
@@ -36,7 +36,8 @@ export class AuthService {
       createdAt: createdAt,
       address: address,
       phone: phone,
-      isActive: isActive
+      isActive: isActive,
+      creditPoints: creditPoints,
     });
 
     return {
@@ -48,12 +49,12 @@ export class AuthService {
   async login({ email, password }: LoginDto) {
     const user = await this.usersService.findByEmailWithPassword(email);
     if (!user) {
-      throw new UnauthorizedException('email is wrong');
+      throw new UnauthorizedException(this.messages.emailIsWrong);
     }
 
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedException('password is wrong');
+      throw new UnauthorizedException(this.messages.passwordIsWrong);
     }
 
     const payload = { email: user.email, role: user.role };

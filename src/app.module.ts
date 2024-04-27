@@ -12,7 +12,7 @@ import { ProductModule } from './modules/products/product.module';
       port: 5432,
       username: 'mantum',
       password: 'gatostem123',
-      database: 'pdo',
+      database: 'pdo2',
       autoLoadEntities: true,
       synchronize: true, 
     }),

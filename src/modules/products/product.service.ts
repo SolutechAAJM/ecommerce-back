@@ -3,8 +3,7 @@ import { Injectable, NotFoundException  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { createProductDTO } from './dto/create.dto';
-import { getLanguageMessagesApp } from 'src/config';
-import { getMessages } from './constants/jwt.constant';
+import { getMessages } from 'src/messages/messages';
 import { Product } from './entities/product.entity';
 import { updateProductDTO } from './dto/update.dto';
 
@@ -15,8 +14,7 @@ export class ProductService {
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  private languageModule: string = getLanguageMessagesApp();
-  private messages = getMessages(this.languageModule);
+  private messages = getMessages();
 
   async create(productDTO: createProductDTO) {
     const product = this.productRepository.save(productDTO);
