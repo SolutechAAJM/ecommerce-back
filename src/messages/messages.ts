@@ -15,6 +15,7 @@ export const messages = {
         productNotFound: 'Product not found',
         createProductError: 'Error creating product',
         updateProductError: 'Error updating product',
+        deletedProduct: 'Successfully deleted product',
 
         categoryCreated: 'Successfully created category',
         categoryUpdated: 'It was updated correctly',
@@ -47,6 +48,8 @@ export const messages = {
         productNotFound: 'Producto no encontrado',
         createProductError: 'Error creando el producto',
         updateProductError: 'Error al actualizar el producto',
+        deletedProduct: 'Producto eliminado con exito',
+
 
         categoryCreated: 'Categoria creada correctamente',
         categoryUpdated: 'Se actualizo la categoria correctamente',
