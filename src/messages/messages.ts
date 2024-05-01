@@ -9,6 +9,7 @@ export const messages = {
         userAlreadyExist: 'User already exists with this email',
         emailIsWrong: 'email is wrong',
         passwordIsWrong: 'password is wrong',
+        userNotFound: 'User not found',
         
         productCreated: 'Successfully created product',
         productUpdated: 'It was updated correctly',
@@ -42,6 +43,7 @@ export const messages = {
         userAlreadyExist: 'Ya existe un usuario con este correo electronico.',
         emailIsWrong: 'No existe niguna cuenta con este correo electronico',
         passwordIsWrong: 'Contraseña incorrecta',
+        userNotFound: 'El usuario no existe',
 
         productCreated: 'Producto creado correctamente',
         productUpdated: 'Se actualizo correctamente',

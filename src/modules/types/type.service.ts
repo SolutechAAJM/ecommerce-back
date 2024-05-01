@@ -49,7 +49,7 @@ export class TypeService {
     }
 
     async remove(id: number) {
-        const type = this.findOne(id);
+        const type = await this.findOne(id);
 
         if (!type) {
            throw new NotFoundException(this.messages.typeNotFound);

@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule} from './modules/users/users.module';
 import { ProductModule } from './modules/products/product.module';
-import { CategoryModule } from './modules/categoryes/category.module';
+import { CategoryModule } from './modules/category/category.module';
 import { TypeModule } from './modules/types/type.module';
 
 @Module({

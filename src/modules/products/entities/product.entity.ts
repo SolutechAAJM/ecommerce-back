@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne  } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne  } from 'typeorm';
 import { Type } from 'src/modules/types/entities/type.entity';
-import { Category } from 'src/modules/categoryes/entities/category.entity';
+import { Category } from 'src/modules/category/entities/category.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 
 @Entity('product')
