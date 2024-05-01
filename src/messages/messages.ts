@@ -16,6 +16,21 @@ export const messages = {
         createProductError: 'Error creating product',
         updateProductError: 'Error updating product',
 
+        categoryCreated: 'Successfully created category',
+        categoryUpdated: 'It was updated correctly',
+        categoryNotFound: 'Category not found',
+        createCategoryError: 'Error creating category',
+        updateCategoryError: 'Error updating category',
+        deletedCategory: 'Successfully deleted category',
+
+        typeCreated: 'Successfully created type',
+        typeUpdated: 'It was updated correctly',
+        typeNotFound: 'Type not found',
+        createTypeError: 'Error creating type',
+        updateTypeError: 'Error updating type',
+        deletedType: 'Successfully deleted type',
+
+        
     },
 
     outputSpanishMessages: {
@@ -32,6 +47,23 @@ export const messages = {
         productNotFound: 'Producto no encontrado',
         createProductError: 'Error creando el producto',
         updateProductError: 'Error al actualizar el producto',
+
+        categoryCreated: 'Categoria creada correctamente',
+        categoryUpdated: 'Se actualizo la categoria correctamente',
+        categoryNotFound: 'Categoria no encontrada',
+        createCategoryError: 'Error creando la categoria',
+        updateCategoryError: 'Error al actualizar la categoria',
+        deletedCategory: 'Categoria eliminada correctamente',
+
+
+        typeCreated: 'Tipo creado correctamente',
+        typeUpdated: 'Se actualizo el tipo correctamente',
+        typeNotFound: 'Tipo no encontrado',
+        createTypeError: 'Error creando el tipo',
+        updateTypeError: 'Error al actualizar el tipo',
+        deletedType: 'Tipo eliminado correctamente',
+
+
     }
 }
 

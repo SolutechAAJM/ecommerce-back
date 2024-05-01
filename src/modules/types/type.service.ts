@@ -1,10 +1,11 @@
 // category.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Type } from './entities/type.entity';
 import { CreateTypeDto } from './dto/create.dto';
 import { UpdateTypeDto } from './dto/update.dto';
+import { getMessages } from 'src/messages/messages';
 
 @Injectable()
 export class TypeService {
@@ -12,6 +13,8 @@ export class TypeService {
         @InjectRepository(Type)
         private readonly typeRepository: Repository<Type>,
     ) { }
+
+    private messages = getMessages();
 
     async findAll(): Promise<Type[]> {
         return this.typeRepository.find();
@@ -28,8 +31,8 @@ export class TypeService {
         return this.typeRepository.save(category);
     }
 
-    async update(id: number, updateTypeDto: UpdateTypeDto): Promise<Type> {
-        const category = await this.typeRepository.findOne({ where: { id: id } });
+    async update(updateTypeDto: UpdateTypeDto): Promise<Type> {
+        const category = await this.typeRepository.findOne({ where: { id: updateTypeDto.id } });
         if (!category) {
             throw new Error('Category not found');
         }
@@ -45,7 +48,13 @@ export class TypeService {
         return this.typeRepository.save(category);
     }
 
-    async remove(id: number): Promise<void> {
+    async remove(id: number) {
+        const type = this.findOne(id);
+
+        if (!type) {
+           throw new NotFoundException(this.messages.typeNotFound);
+        }
         await this.typeRepository.delete(id);
+        return type;
     }
 }

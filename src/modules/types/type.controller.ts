@@ -1,50 +1,79 @@
-// category.controller.ts
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+
+import { Controller, Get, Post,  HttpException , Body, Param, HttpStatus, Res} from '@nestjs/common';
+import { Response } from 'express';
 import { TypeService } from './type.service';
 import { CreateTypeDto } from './dto/create.dto';
 import { UpdateTypeDto } from './dto/update.dto';
+import { getMessages } from 'src/messages/messages';
+import { EcommerceController } from '../admin/ecommerce.controller';
 
 @Controller('types')
-export class TypeController {
-  constructor(private readonly typeService: TypeService) {}
+export class TypeController extends EcommerceController
+{
+  constructor(private readonly typeService: TypeService) {
+    super();
+  }
+
+  private messages = getMessages();
 
   @Get()
-  findAll() {
-    return this.typeService.findAll();
+  async findAll(@Res() res: Response) {
+    try {
+      const response = await this.typeService.findAll();
+      return this.successResponse(res, this.messages.success, response);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.typeService.findOne(+id);
+  async findOne(@Param('id') id: number, @Res() res: Response) {
+    try {
+      const response = await this.typeService.findOne(+id);
+      return this.successResponse(res, this.messages.success, response);
+    } catch (error) {
+      throw new HttpException(error.message || this.messages.typeNotFound, HttpStatus.NOT_FOUND);
+    }
   }
 
-  @Post()
-  create(@Body() createCategoryDto: CreateTypeDto) {
-    return this.typeService.create(createCategoryDto);
+  @Post('create')
+  async create
+  (
+    @Body() createTypeDto: CreateTypeDto,
+    @Res() res: Response
+  ) 
+  {
+    try {
+      const response = await this.typeService.create(createTypeDto);
+      return this.createdResponse(res, this.messages.typeCreated, response);
+    } catch (error) {
+      throw new HttpException(error.message || this.messages.createTypeError, HttpStatus.NOT_FOUND);
+    }
   }
 
-  @Put(':id')
-  update(@Param('id') id: number, @Body() updateCategoryDto: UpdateTypeDto) {
-    return this.typeService.update(+id, updateCategoryDto);
+  @Post('update')
+  async update
+  (
+    @Body() updateTypeDto: UpdateTypeDto,
+    @Res() res: Response
+  ) 
+  {
+    try {
+      const response = await this.typeService.update(updateTypeDto);
+      return this.createdResponse(res, this.messages.typeUpdated, response);
+    } catch (error) {
+      throw new HttpException(error.message || this.messages.typeNotFound, HttpStatus.NOT_FOUND);
+    }
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.typeService.remove(+id);
-  }
-
-  @Post('create') 
-  createCustom(@Body() createCategoryDto: CreateTypeDto) {
-    return this.typeService.create(createCategoryDto);
-  }
-
-  @Post(':id/update') 
-  updateCustom(@Param('id') id: number, @Body() updateCategoryDto: UpdateTypeDto) {
-    return this.typeService.update(+id, updateCategoryDto);
-  }
-
-  @Post(':id/delete') 
-  removeCustom(@Param('id') id: number) {
-    return this.typeService.remove(+id);
+   
+  @Post(':id/delete')
+  async remove(@Param('id') id: number, @Res() res: Response ) {
+    try {
+      const response = await this.typeService.remove(+id);
+      return this.successResponse(res, this.messages.deletedType, response);
+    } catch (error) {
+      throw new HttpException(error.message || this.messages.typeNotFound, HttpStatus.NOT_FOUND);
+    }
   }
 }

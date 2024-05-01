@@ -1,5 +1,5 @@
 
-import { Injectable, NotFoundException  } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { createProductDTO } from './dto/create.dto';
@@ -12,7 +12,7 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
-  ) {}
+  ) { }
 
   private messages = getMessages();
 
@@ -22,9 +22,9 @@ export class ProductService {
   }
 
 
-  async update({id, name,description, price, stock, characteristics, isOffer,dateCreation, lastModify, typeId, categoryId,userId }: updateProductDTO): Promise<Product> {
+  async update({ id, name, description, price, stock, characteristics, isOffer, dateCreation, lastModify, typeId, categoryId, userId }: updateProductDTO): Promise<Product> {
     const existingProduct = await this.productRepository.findOne({
-      where: {id},
+      where: { id },
       select: ['id'],
     });
 
@@ -33,13 +33,13 @@ export class ProductService {
     }
 
     Object.assign(
-      existingProduct, 
+      existingProduct,
       {
         id,
-        name, 
+        name,
         description,
         price,
-        stock, 
+        stock,
         characteristics,
         isOffer,
         dateCreation,
@@ -56,6 +56,29 @@ export class ProductService {
     } catch (error) {
       throw new Error(this.messages.updateProductError);
     }
+  }
+
+
+  async findAll(): Promise<Product[]> {
+    return this.productRepository.find();
+  }
+
+  async findOne(id: number): Promise<Product> {
+    const product = await this.productRepository.findOne({ where: { id: id } });
+    if (!product) {
+      throw new NotFoundException(this.messages.productNotFound);
+    }
+    return product;
+  }
+
+  async remove(id: number) {
+    const product = this.findOne(id);
+
+    if (!product) {
+      throw new NotFoundException(this.messages.productNotFound);
+    }
+    await this.productRepository.delete(id);
+    return product;
   }
 
 }

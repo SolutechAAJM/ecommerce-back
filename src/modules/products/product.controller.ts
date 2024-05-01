@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res, HttpException, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Post, Get, Res, HttpException, HttpStatus, Param } from '@nestjs/common';
 import { Response } from 'express';
 import { ProductService } from './product.service';
 import { createProductDTO } from './dto/create.dto';
@@ -13,6 +13,26 @@ export class ProductController extends EcommerceController {
   }
 
   private messages = getMessages();
+
+  @Get()
+  async findAll(@Res() res: Response) {
+    try {
+      const response = await this.productService.findAll();
+      return this.successResponse(res, this.messages.success, response);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: number, @Res() res: Response) {
+    try {
+      const response = await this.productService.findOne(+id);
+      return this.successResponse(res, this.messages.success, response);
+    } catch (error) {
+      throw new HttpException(error.message || this.messages.productNotFound, HttpStatus.NOT_FOUND);
+    }
+  }
 
   @Post('create')
   async register(
@@ -35,4 +55,16 @@ export class ProductController extends EcommerceController {
       throw new HttpException(error.message || this.messages.productNotFound, HttpStatus.NOT_FOUND);
     }
   }
+
+  @Post(':id/delete')
+  async remove(@Param('id') id: number, @Res() res: Response ) {
+    try {
+      const response = await this.productService.remove(+id);
+      return this.successResponse(res, this.messages.deletedProduct, response);
+    } catch (error) {
+      throw new HttpException(error.message || this.messages.productNotFound, HttpStatus.NOT_FOUND);
+    }
+  }
+
+
 }

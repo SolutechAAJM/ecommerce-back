@@ -1,6 +1,9 @@
 import { Response } from 'express';
 
 export class EcommerceController {
+
+    private res: Response;
+
     // Respuesta 200 OK
     successResponse(res: Response, message: string, body: any) {
         res.status(200).json({ status: 200, message,  body });

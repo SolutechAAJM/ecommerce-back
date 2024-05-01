@@ -1,10 +1,11 @@
 // category.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from './entities/category.entity';
 import { CreateCategoryDto } from './dto/create.dto';
 import { UpdateCategoryDto } from './dto/update.dto';
+import { getMessages } from 'src/messages/messages';
 
 @Injectable()
 export class CategoryService {
@@ -13,12 +14,18 @@ export class CategoryService {
         private readonly categoryRepository: Repository<Category>,
     ) { }
 
+    private messages = getMessages();
+
     async findAll(): Promise<Category[]> {
         return this.categoryRepository.find();
     }
 
     async findOne(id: number): Promise<Category> {
-        return await this.categoryRepository.findOne({ where: { id: id } });
+        const category = await this.categoryRepository.findOne({ where: { id: id } });
+        if (!category) {
+            throw new NotFoundException(this.messages.categoryNotFound);
+        }
+        return category;
     }
 
     async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
@@ -28,11 +35,13 @@ export class CategoryService {
         return this.categoryRepository.save(category);
     }
 
-    async update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
-        const category = await this.categoryRepository.findOne({ where: { id: id } });
+    async update(updateCategoryDto: UpdateCategoryDto): Promise<Category> {
+        const category = await this.categoryRepository.findOne({ where: { id: updateCategoryDto.id } });
+     
         if (!category) {
-            throw new Error('Category not found');
+           throw new NotFoundException(this.messages.categoryNotFound);
         }
+        
         if (updateCategoryDto.name) {
             category.name = updateCategoryDto.name;
         }
@@ -45,7 +54,13 @@ export class CategoryService {
         return this.categoryRepository.save(category);
     }
 
-    async remove(id: number): Promise<void> {
+    async remove(id: number) {
+        const category = this.findOne(id);
+
+        if (!category) {
+           throw new NotFoundException(this.messages.categoryNotFound);
+        }
         await this.categoryRepository.delete(id);
+        return category;
     }
 }
