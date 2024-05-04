@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne  } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany  } from 'typeorm';
 import { Type } from 'src/modules/types/entities/type.entity';
 import { Category } from 'src/modules/category/entities/category.entity';
 import { User } from 'src/modules/users/entities/user.entity';
+import { CartItem } from 'src/modules/shopping/entities/cartitem.entity';
 
 @Entity('product')
 export class Product {
@@ -40,4 +41,7 @@ export class Product {
 
   @ManyToOne(() => User, user=> user.products, { nullable: true })
   user: User;
+
+  @OneToMany(() => CartItem, cartItem => cartItem.product)
+  cartItems: CartItem[];
 }

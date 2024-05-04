@@ -5,6 +5,7 @@ import { UsersModule} from './modules/users/users.module';
 import { ProductModule } from './modules/products/product.module';
 import { CategoryModule } from './modules/category/category.module';
 import { TypeModule } from './modules/types/type.module';
+import { ShoppingModule } from './modules/shopping/shopping.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TypeModule } from './modules/types/type.module';
     ProductModule,
     CategoryModule,
     TypeModule,
+    ShoppingModule,
   ],
   controllers: [],
   providers: [],
