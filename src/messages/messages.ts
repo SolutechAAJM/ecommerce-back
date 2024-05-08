@@ -32,6 +32,8 @@ export const messages = {
         updateTypeError: 'Error updating type',
         deletedType: 'Successfully deleted type',
 
+        shoppinCartNotFound: 'Shopping cart not found'
+
         
     },
 
@@ -67,6 +69,8 @@ export const messages = {
         createTypeError: 'Error creando el tipo',
         updateTypeError: 'Error al actualizar el tipo',
         deletedType: 'Tipo eliminado correctamente',
+
+        shoppinCartNotFound: 'Carrito de compras no encontrado'
 
 
     }
