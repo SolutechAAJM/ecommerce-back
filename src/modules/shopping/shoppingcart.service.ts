@@ -24,9 +24,7 @@ export class ShoppingCartService {
         private readonly cartItemRepository: Repository<CartItem>,
 
         private readonly userService: UsersService,
-
         private readonly productService: ProductService
-
     ) { }
 
     private messages = getMessages();
@@ -34,40 +32,56 @@ export class ShoppingCartService {
     async findOne(id: number): Promise<ShoppingCart> {
         const shopingCart = await this.shoppingCartRepository.findOne({ where: { id: id } });
         if (!shopingCart) {
-            throw new Error(this.messages.shoppinCartNotFound);
+            throw new Error(this.messages.shoppingCartNotFound);
         }
         return shopingCart;
+    }
+
+    async findOneByIdUser(id: number, intern:boolean = false): Promise<ShoppingCart> {
+        const shoppingCart = await this.shoppingCartRepository
+          .createQueryBuilder('shopping_cart')
+          .where('shopping_cart.userId = :id', { id })
+          .getOne();
+    
+        if(!intern){
+            if (!shoppingCart) {
+                throw new Error(this.messages.shoppingCartNotFound);
+            }
+        }
+    
+        return shoppingCart;
     }
 
 
     async createShoppingCart(createShoppingCartDto: CreateShoppingCartDto): Promise<ShoppingCart> {
 
         const user = await this.userService.findOne(createShoppingCartDto.idUser);
-
         if (!user) throw new Error(this.messages.userNotFound);
+
+        const shopping_Cart = await this.findOneByIdUser(user.id, true);
+        if (shopping_Cart) return shopping_Cart;
 
         const shoppingCart = new ShoppingCart();
         shoppingCart.user = user;
+
         return await this.shoppingCartRepository.save(shoppingCart);
     }
 
     async addProductToCart(addProductToCartDto: AddProductToCartDto): Promise<CartItem> {
 
-        const { shoppingCartId, productId, quantity } = addProductToCartDto;
-        const shoppingCart = await this.findOne(shoppingCartId);
+        const shoppingCart = await this.findOne(addProductToCartDto.shoppingCartId);
 
         if (!shoppingCart) {
-            throw new Error();
+            throw new Error(this.messages.shoppingCartNotFound);
         }
 
-        const product = await this.productService.findOne(productId);
-
+        const product = await this.productService.findOne(addProductToCartDto.productId);
         if (!product) throw new Error(this.messages.productNotFound);
 
         const cartItem = new CartItem();
         cartItem.shoppingCart = shoppingCart;
         cartItem.product = product;
-        cartItem.quantity = quantity;
+        cartItem.quantity = addProductToCartDto.quantity;
 
         return await this.cartItemRepository.save(cartItem);
     }

@@ -11,19 +11,27 @@ import { ShoppingModule } from './modules/shopping/shopping.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'ep-young-surf-a5hioq57.us-east-2.aws.neon.tech',
+      // host: 'ep-young-surf-a5hioq57.us-east-2.aws.neon.tech',
+      // port: 5432,
+      // username: 'ecommerce_owner',
+      // password: 'TYzoCfF9RP7g',
+      // database: 'ecommerce',
+      // autoLoadEntities: true,
+      // synchronize: true,
+      // ssl: {
+      //   rejectUnauthorized: false, 
+      // },
+      // extra: {
+      //   options: 'project=ep-young-surf-a5hioq57', 
+      // },
+
+      host: 'localhost',
       port: 5432,
-      username: 'ecommerce_owner',
-      password: 'TYzoCfF9RP7g',
-      database: 'ecommerce',
+      username: 'mantum',
+      password: 'gatostem123',
+      database: 'poo',
       autoLoadEntities: true,
       synchronize: true,
-      ssl: {
-        rejectUnauthorized: false, 
-      },
-      extra: {
-        options: 'project=ep-young-surf-a5hioq57', 
-      },
     }),
     AuthModule,
     UsersModule,

@@ -3,6 +3,7 @@ import { Type } from 'src/modules/types/entities/type.entity';
 import { Category } from 'src/modules/category/entities/category.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import { CartItem } from 'src/modules/shopping/entities/cartitem.entity';
+import { ShoppingCart } from 'src/modules/shopping/entities/shoppingcart.entity';
 
 @Entity('product')
 export class Product {

@@ -32,7 +32,10 @@ export const messages = {
         updateTypeError: 'Error updating type',
         deletedType: 'Successfully deleted type',
 
-        shoppinCartNotFound: 'Shopping cart not found'
+        shoppingCartNotFound: 'Shopping cart not found',
+        shoppingCartCreated: 'Successfully created shopping cart',
+
+        itemCartCreated: 'Successfuly product is added to the cart'
 
         
     },
@@ -70,8 +73,10 @@ export const messages = {
         updateTypeError: 'Error al actualizar el tipo',
         deletedType: 'Tipo eliminado correctamente',
 
-        shoppinCartNotFound: 'Carrito de compras no encontrado'
+        shoppingCartNotFound: 'Carrito de compras no encontrado',
+        shoppingCartCreated: 'Carrito de compras creado correctamente',
 
+        itemCartCreated: 'Se añadio el producto al carrito correctamente',
 
     }
 }
