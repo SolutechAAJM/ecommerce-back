@@ -40,7 +40,7 @@ export class AuthController extends EcommerceController {
       const response = await this.authService.login(loginDto);
       return this.successResponse(res, this.messages.successLogin, response); 
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+      throw new HttpException(error.message, HttpStatus.OK);
     }
   }
 

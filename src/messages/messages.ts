@@ -84,6 +84,6 @@ export const messages = {
 
 export const getMessages = () => {
     const languageModule: string = getLanguageApp();
-    return (languageModule == 'english')? messages.outputEnglishMessages: messages.outputSpanishMessages;
+    return (languageModule == 'z')? messages.outputEnglishMessages: messages.outputSpanishMessages;
 }
   
