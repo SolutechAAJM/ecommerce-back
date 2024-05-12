@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { Category } from './entities/category.entity';
 import { CreateCategoryDto } from './dto/create.dto';
 import { UpdateCategoryDto } from './dto/update.dto';
-import { getMessages } from 'src/messages/messages';
+import { messages } from 'src/messages/messages';
 
 @Injectable()
 export class CategoryService {
@@ -14,7 +14,6 @@ export class CategoryService {
         private readonly categoryRepository: Repository<Category>,
     ) { }
 
-    private messages = getMessages();
 
     async findAll(): Promise<Category[]> {
         return this.categoryRepository.find();
@@ -23,7 +22,7 @@ export class CategoryService {
     async findOne(id: number): Promise<Category> {
         const category = await this.categoryRepository.findOne({ where: { id: id } });
         if (!category) {
-            throw new NotFoundException(this.messages.categoryNotFound);
+            throw new NotFoundException(messages.categoryNotFound);
         }
         return category;
     }
@@ -39,7 +38,7 @@ export class CategoryService {
         const category = await this.categoryRepository.findOne({ where: { id: updateCategoryDto.id } });
      
         if (!category) {
-           throw new NotFoundException(this.messages.categoryNotFound);
+           throw new NotFoundException(messages.categoryNotFound);
         }
         
         if (updateCategoryDto.name) {
@@ -58,7 +57,7 @@ export class CategoryService {
         const category = await this.findOne(id);
 
         if (!category) {
-           throw new NotFoundException(this.messages.categoryNotFound);
+           throw new NotFoundException(messages.categoryNotFound);
         }
         await this.categoryRepository.delete(id);
         return category;

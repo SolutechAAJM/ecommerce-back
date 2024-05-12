@@ -42,4 +42,6 @@ export class createProductDTO {
   @IsNotEmpty()
   @IsNumber()
   userId: number;
+
+  urlImages: Array<any>;
 }

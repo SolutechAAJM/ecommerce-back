@@ -2,44 +2,43 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { createProductDTO } from './dto/create.dto';
-import { getMessages } from 'src/messages/messages';
+
 import { Product } from './entities/product.entity';
+
 import { updateProductDTO } from './dto/update.dto';
+import { InstanceImageProductDTO } from '../archive/dto/images.dto';
+
 import { CategoryService } from '../category/category.service';
 import { TypeService } from '../types/type.service';
 import { UsersService } from '../users/users.service';
+import { ImageProductService } from '../archive/image.service';
+
+import { messages } from 'src/messages/messages';
+
+
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
-    private readonly categoryService: CategoryService,
-    private readonly typeService: TypeService,
-    private readonly userService: UsersService,
+      private readonly productRepository: Repository<Product>,
+      private readonly categoryService: CategoryService,
+      private readonly typeService: TypeService,
+      private readonly userService: UsersService,
+      private readonly imagesProductService: ImageProductService,
   ) { }
-
-  private messages = getMessages();
 
   async create(productDTO: createProductDTO) {
 
     const category = await this.categoryService.findOne(productDTO.categoryId)
-
-    if (!category) {
-      throw new NotFoundException(this.messages.categoryNotFound);
-    }
+    if (!category) throw new NotFoundException(messages.categoryNotFound);
 
     const type = await this.typeService.findOne(productDTO.typeId)
-
-    if (!type) {
-      throw new NotFoundException(this.messages.typeNotFound);
-    }
+    if (!type)throw new NotFoundException(messages.typeNotFound);
 
     const user  = await this.userService.findOne(productDTO.userId)
-
-    if (!user) {
-      throw new NotFoundException(this.messages.userNotFound);
-    }
+    if (!user) throw new NotFoundException(messages.userNotFound);
 
     const product = new Product();
     product.name = productDTO.name;
@@ -54,7 +53,26 @@ export class ProductService {
     product.category = category;
     product.user = user;
 
-    const response = await this.productRepository.save(product);
+    const productSaved = await this.productRepository.save(product);
+
+    if(productDTO.urlImages.length){
+      let instaceImageDTO = new InstanceImageProductDTO;
+      instaceImageDTO.url = productDTO.urlImages;
+      instaceImageDTO.idProduct = productSaved.id;
+  
+      const imagesSaved = await this.imagesProductService.instanceImageProduct(instaceImageDTO)
+      const response = {
+        productSaved: productSaved, 
+        imageSaved: imagesSaved
+      }
+      return response;
+    }
+   
+    const response = {
+      productSaved: productSaved, 
+      imageSaved: []
+    }
+    
     return response;
   }
 
@@ -66,22 +84,22 @@ export class ProductService {
     });
 
     if (!existingProduct) {
-      throw new NotFoundException(this.messages.productNotFound);
+      throw new NotFoundException(messages.productNotFound);
     }
 
     const category = await this.categoryService.findOne(categoryId)
     if (!category) {
-      throw new NotFoundException(this.messages.categoryNotFound);
+      throw new NotFoundException(messages.categoryNotFound);
     }
 
     const type = await this.typeService.findOne(typeId)
     if (!type) {
-      throw new NotFoundException(this.messages.typeNotFound + type+ typeId);
+      throw new NotFoundException(messages.typeNotFound + type+ typeId);
     }
 
     const user  = await this.userService.findOne(userId)
     if (!user) {
-      throw new NotFoundException(this.messages.userNotFound);
+      throw new NotFoundException(messages.userNotFound);
     }
 
     Object.assign(
@@ -106,7 +124,7 @@ export class ProductService {
       const updatedProduct = await this.productRepository.save(existingProduct);
       return updatedProduct;
     } catch (error) {
-      throw new Error(this.messages.updateProductError);
+      throw new Error(messages.updateProductError);
     }
   }
 
@@ -118,7 +136,7 @@ export class ProductService {
   async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({ where: { id: id } });
     if (!product) {
-      throw new NotFoundException(this.messages.productNotFound);
+      throw new NotFoundException(messages.productNotFound);
     }
     return product;
   }
@@ -127,7 +145,7 @@ export class ProductService {
     const product = this.findOne(id);
 
     if (!product) {
-      throw new NotFoundException(this.messages.productNotFound);
+      throw new NotFoundException(messages.productNotFound);
     }
     await this.productRepository.delete(id);
     return product;

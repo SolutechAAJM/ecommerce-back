@@ -12,7 +12,8 @@ import { UsersService } from '../users/users.service';
 import { CreateShoppingCartDto } from './dto/create.dto';
 import { AddProductToCartDto } from './dto/addProduct.dto';
 
-import { getMessages } from 'src/messages/messages';
+import { messages } from 'src/messages/messages';
+
 
 @Injectable()
 export class ShoppingCartService {
@@ -27,12 +28,11 @@ export class ShoppingCartService {
         private readonly productService: ProductService
     ) { }
 
-    private messages = getMessages();
 
     async findOne(id: number): Promise<ShoppingCart> {
         const shopingCart = await this.shoppingCartRepository.findOne({ where: { id: id } });
         if (!shopingCart) {
-            throw new Error(this.messages.shoppingCartNotFound);
+            throw new Error(messages.shoppingCartNotFound);
         }
         return shopingCart;
     }
@@ -45,7 +45,7 @@ export class ShoppingCartService {
     
         if(!intern){
             if (!shoppingCart) {
-                throw new Error(this.messages.shoppingCartNotFound);
+                throw new Error(messages.shoppingCartNotFound);
             }
         }
     
@@ -56,7 +56,7 @@ export class ShoppingCartService {
     async createShoppingCart(createShoppingCartDto: CreateShoppingCartDto): Promise<ShoppingCart> {
 
         const user = await this.userService.findOne(createShoppingCartDto.idUser);
-        if (!user) throw new Error(this.messages.userNotFound);
+        if (!user) throw new Error(messages.userNotFound);
 
         const shopping_Cart = await this.findOneByIdUser(user.id, true);
         if (shopping_Cart) return shopping_Cart;
@@ -72,11 +72,11 @@ export class ShoppingCartService {
         const shoppingCart = await this.findOne(addProductToCartDto.shoppingCartId);
 
         if (!shoppingCart) {
-            throw new Error(this.messages.shoppingCartNotFound);
+            throw new Error(messages.shoppingCartNotFound);
         }
 
         const product = await this.productService.findOne(addProductToCartDto.productId);
-        if (!product) throw new Error(this.messages.productNotFound);
+        if (!product) throw new Error(messages.productNotFound);
 
         const cartItem = new CartItem();
         cartItem.shoppingCart = shoppingCart;

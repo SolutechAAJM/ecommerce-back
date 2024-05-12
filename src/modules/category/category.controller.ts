@@ -4,7 +4,7 @@ import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create.dto';
 import { UpdateCategoryDto } from './dto/update.dto';
 import { EcommerceController } from '../admin/ecommerce.controller';
-import { getMessages } from 'src/messages/messages';
+import {  messages } from 'src/messages/messages';
 
 
 @Controller('categories')
@@ -13,13 +13,11 @@ export class CategoryController extends EcommerceController {
     super();
   }
 
-  private messages = getMessages();
-
   @Get()
   async findAll(@Res() res: Response) {
     try {
       const response = await this.categoryService.findAll();
-      return this.successResponse(res, this.messages.success, response);
+      return this.successResponse(res, messages.success, response);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
@@ -29,9 +27,9 @@ export class CategoryController extends EcommerceController {
   async findOne(@Param('id') id: number, @Res() res: Response) {
     try {
       const response = await this.categoryService.findOne(+id);
-      return this.successResponse(res, this.messages.success, response);
+      return this.successResponse(res, messages.success, response);
     } catch (error) {
-      throw new HttpException(error.message || this.messages.categoryNotFound, HttpStatus.NOT_FOUND);
+      throw new HttpException(error.message || messages.categoryNotFound, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -44,9 +42,9 @@ export class CategoryController extends EcommerceController {
   {
     try {
       const response = await this.categoryService.create(createCategoryDTO);
-      return this.createdResponse(res, this.messages.categoryCreated, response);
+      return this.createdResponse(res, messages.categoryCreated, response);
     } catch (error) {
-      throw new HttpException(error.message || this.messages.createCategoryError, HttpStatus.NOT_FOUND);
+      throw new HttpException(error.message || messages.createCategoryError, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -59,9 +57,9 @@ export class CategoryController extends EcommerceController {
   {
     try {
       const response = await this.categoryService.update(updateCategoryDto);
-      return this.createdResponse(res, this.messages.productUpdated, response);
+      return this.createdResponse(res, messages.productUpdated, response);
     } catch (error) {
-      throw new HttpException(error.message || this.messages.categoryNotFound, HttpStatus.NOT_FOUND);
+      throw new HttpException(error.message || messages.categoryNotFound, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -70,9 +68,9 @@ export class CategoryController extends EcommerceController {
   async remove(@Param('id') id: number, @Res() res: Response ) {
     try {
       const response = await this.categoryService.remove(+id);
-      return this.successResponse(res, this.messages.deletedCategory, response);
+      return this.successResponse(res, messages.deletedCategory, response);
     } catch (error) {
-      throw new HttpException(error.message || this.messages.categoryNotFound, HttpStatus.NOT_FOUND);
+      throw new HttpException(error.message || messages.categoryNotFound, HttpStatus.NOT_FOUND);
     }
   }
 }

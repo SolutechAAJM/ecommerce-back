@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { Type } from './entities/type.entity';
 import { CreateTypeDto } from './dto/create.dto';
 import { UpdateTypeDto } from './dto/update.dto';
-import { getMessages } from 'src/messages/messages';
+import {  messages } from 'src/messages/messages';
 
 @Injectable()
 export class TypeService {
@@ -14,7 +14,6 @@ export class TypeService {
         private readonly typeRepository: Repository<Type>,
     ) { }
 
-    private messages = getMessages();
 
     async findAll(): Promise<Type[]> {
         return this.typeRepository.find();
@@ -24,35 +23,35 @@ export class TypeService {
         return await this.typeRepository.findOne({ where: { id: id } });
     }
 
-    async create(createCategoryDto: CreateTypeDto): Promise<Type> {
-        const category = new Type();
-        category.name = createCategoryDto.name;
-        category.description = createCategoryDto.description;
-        return this.typeRepository.save(category);
+    async create(createTypeDto: CreateTypeDto): Promise<Type> {
+        const type = new Type();
+        type.name = createTypeDto.name;
+        type.description = createTypeDto.description;
+        return this.typeRepository.save(type);
     }
 
     async update(updateTypeDto: UpdateTypeDto): Promise<Type> {
-        const category = await this.typeRepository.findOne({ where: { id: updateTypeDto.id } });
-        if (!category) {
-            throw new Error('Category not found');
+        const type = await this.typeRepository.findOne({ where: { id: updateTypeDto.id } });
+        if (!type) {
+            throw new Error(messages.typeNotFound);
         }
         if (updateTypeDto.name) {
-            category.name = updateTypeDto.name;
+            type.name = updateTypeDto.name;
         }
         if (updateTypeDto.description) {
-            category.description = updateTypeDto.description;
+            type.description = updateTypeDto.description;
         }
         if (updateTypeDto.active !== undefined) {
-            category.active = updateTypeDto.active;
+            type.active = updateTypeDto.active;
         }
-        return this.typeRepository.save(category);
+        return this.typeRepository.save(type);
     }
 
     async remove(id: number) {
         const type = await this.findOne(id);
 
         if (!type) {
-           throw new NotFoundException(this.messages.typeNotFound);
+           throw new NotFoundException(messages.typeNotFound);
         }
         await this.typeRepository.delete(id);
         return type;

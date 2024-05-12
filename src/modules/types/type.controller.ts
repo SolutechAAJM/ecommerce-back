@@ -4,7 +4,7 @@ import { Response } from 'express';
 import { TypeService } from './type.service';
 import { CreateTypeDto } from './dto/create.dto';
 import { UpdateTypeDto } from './dto/update.dto';
-import { getMessages } from 'src/messages/messages';
+import { messages } from 'src/messages/messages';
 import { EcommerceController } from '../admin/ecommerce.controller';
 
 @Controller('types')
@@ -14,13 +14,12 @@ export class TypeController extends EcommerceController
     super();
   }
 
-  private messages = getMessages();
 
   @Get()
   async findAll(@Res() res: Response) {
     try {
       const response = await this.typeService.findAll();
-      return this.successResponse(res, this.messages.success, response);
+      return this.successResponse(res, messages.success, response);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
@@ -30,9 +29,9 @@ export class TypeController extends EcommerceController
   async findOne(@Param('id') id: number, @Res() res: Response) {
     try {
       const response = await this.typeService.findOne(+id);
-      return this.successResponse(res, this.messages.success, response);
+      return this.successResponse(res, messages.success, response);
     } catch (error) {
-      throw new HttpException(error.message || this.messages.typeNotFound, HttpStatus.NOT_FOUND);
+      throw new HttpException(error.message || messages.typeNotFound, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -45,9 +44,9 @@ export class TypeController extends EcommerceController
   {
     try {
       const response = await this.typeService.create(createTypeDto);
-      return this.createdResponse(res, this.messages.typeCreated, response);
+      return this.createdResponse(res, messages.typeCreated, response);
     } catch (error) {
-      throw new HttpException(error.message || this.messages.createTypeError, HttpStatus.NOT_FOUND);
+      throw new HttpException(error.message || messages.createTypeError, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -60,9 +59,9 @@ export class TypeController extends EcommerceController
   {
     try {
       const response = await this.typeService.update(updateTypeDto);
-      return this.createdResponse(res, this.messages.typeUpdated, response);
+      return this.createdResponse(res, messages.typeUpdated, response);
     } catch (error) {
-      throw new HttpException(error.message || this.messages.typeNotFound, HttpStatus.NOT_FOUND);
+      throw new HttpException(error.message || messages.typeNotFound, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -71,9 +70,9 @@ export class TypeController extends EcommerceController
   async remove(@Param('id') id: number, @Res() res: Response ) {
     try {
       const response = await this.typeService.remove(+id);
-      return this.successResponse(res, this.messages.deletedType, response);
+      return this.successResponse(res, messages.deletedType, response);
     } catch (error) {
-      throw new HttpException(error.message || this.messages.typeNotFound, HttpStatus.NOT_FOUND);
+      throw new HttpException(error.message || messages.typeNotFound, HttpStatus.NOT_FOUND);
     }
   }
 }

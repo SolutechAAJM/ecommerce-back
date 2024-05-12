@@ -4,6 +4,7 @@ import { Category } from 'src/modules/category/entities/category.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import { CartItem } from 'src/modules/shopping/entities/cartitem.entity';
 import { ShoppingCart } from 'src/modules/shopping/entities/shoppingcart.entity';
+import { ImageProduct } from 'src/modules/archive/entities/image.entity';
 
 @Entity('product')
 export class Product {
@@ -45,4 +46,7 @@ export class Product {
 
   @OneToMany(() => CartItem, cartItem => cartItem.product)
   cartItems: CartItem[];
+
+  @OneToMany(()=> ImageProduct, imageProduct => imageProduct.product)
+  image: ImageProduct[];
 }
