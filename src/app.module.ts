@@ -6,6 +6,7 @@ import { ProductModule } from './modules/products/product.module';
 import { CategoryModule } from './modules/category/category.module';
 import { TypeModule } from './modules/types/type.module';
 import { ShoppingModule } from './modules/shopping/shopping.module';
+import { ArchiveModule } from './modules/archive/archive.module';
 
 @Module({
   imports: [
@@ -24,7 +25,6 @@ import { ShoppingModule } from './modules/shopping/shopping.module';
       // extra: {
       //   options: 'project=ep-young-surf-a5hioq57', 
       // },
-
       host: 'localhost',
       port: 5432,
       username: 'mantum',
@@ -33,12 +33,14 @@ import { ShoppingModule } from './modules/shopping/shopping.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
+
     AuthModule,
     UsersModule,
     ProductModule,
     CategoryModule,
     TypeModule,
     ShoppingModule,
+    ArchiveModule
   ],
   controllers: [],
   providers: [],

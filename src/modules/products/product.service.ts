@@ -3,12 +3,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { createProductDTO } from './dto/create.dto';
+import { InstanceImageProductDTO } from '../archive/dto/images.dto';
 
 import { Product } from './entities/product.entity';
 import { updateProductDTO } from './dto/update.dto';
 import { CategoryService } from '../category/category.service';
 import { TypeService } from '../types/type.service';
 import { UsersService } from '../users/users.service';
+import { ImageProductService } from '../archive/image.service';
 
 import { messages } from 'src/messages/messages';
 @Injectable()
@@ -19,6 +21,8 @@ export class ProductService {
     private readonly categoryService: CategoryService,
     private readonly typeService: TypeService,
     private readonly userService: UsersService,
+    // private readonly imageProductService: ImageProductService
+
   ) { }
 
 
@@ -55,7 +59,27 @@ export class ProductService {
     product.category = category;
     product.user = user;
 
-    const response = await this.productRepository.save(product);
+
+    const productSaved = await this.productRepository.save(product);
+
+    // if(productDTO.urlImages.length){
+    //   let instaceImageDTO = new InstanceImageProductDTO;
+    //   instaceImageDTO.url = productDTO.urlImages;
+    //   instaceImageDTO.idProduct = productSaved.id;
+  
+    //   const imagesSaved = await this.imageProductService.instanceImageProduct(instaceImageDTO)
+    //   const response = {
+    //     productSaved: productSaved, 
+    //     imageSaved: imagesSaved
+    //   }
+    //   return response;
+    // }
+   
+    const response = {
+      productSaved: productSaved, 
+      imageSaved: []
+    }
+    
     return response;
   }
 

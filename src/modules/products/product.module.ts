@@ -9,11 +9,13 @@ import { Category } from '../category/entities/category.entity';
 import { CategoryService } from '../category/category.service';
 import { TypeService } from '../types/type.service';
 import { UsersService } from '../users/users.service';
+import { ImageProductService } from '../archive/image.service';
+import { ImageProduct } from '../archive/entities/image.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product, User, Type, Category])],
+  imports: [TypeOrmModule.forFeature([Product, User, Type, Category, ImageProduct])],
   controllers: [ProductController],
-  providers: [ProductService, CategoryService, TypeService, UsersService],
+  providers: [ProductService, CategoryService, TypeService, UsersService, ImageProductService],
   exports: [ProductService],
 })
 export class ProductModule {}
