@@ -11,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcryptjs from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
 
-import { getMessages } from 'src/messages/messages';
+import { messages } from 'src/messages/messages';
 
 @Injectable()
 export class AuthService {
@@ -20,13 +20,12 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private messages = getMessages();
 
   async register({ fullName, email, password, createdAt, address, phone, isActive, creditPoints, role}: RegisterDto) {
     const user = await this.usersService.findOneByEmail(email);
 
     if (user) {
-      throw new BadRequestException(this.messages.userAlreadyExist);
+      throw new BadRequestException(messages.userAlreadyExist);
     }
 
     await this.usersService.create({
@@ -50,12 +49,12 @@ export class AuthService {
   async login({ email, password }: LoginDto) {
     const user = await this.usersService.findByEmailWithPassword(email);
     if (!user) {
-      throw new UnauthorizedException(this.messages.emailIsWrong);
+      throw new UnauthorizedException(messages.emailIsWrong);
     }
 
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedException(this.messages.passwordIsWrong);
+      throw new UnauthorizedException(messages.passwordIsWrong);
     }
 
     const payload = { email: user.email, role: user.role };

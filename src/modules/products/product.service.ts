@@ -3,12 +3,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { createProductDTO } from './dto/create.dto';
-import { getMessages } from 'src/messages/messages';
+
 import { Product } from './entities/product.entity';
 import { updateProductDTO } from './dto/update.dto';
 import { CategoryService } from '../category/category.service';
 import { TypeService } from '../types/type.service';
 import { UsersService } from '../users/users.service';
+
+import { messages } from 'src/messages/messages';
 @Injectable()
 export class ProductService {
   constructor(
@@ -19,26 +21,25 @@ export class ProductService {
     private readonly userService: UsersService,
   ) { }
 
-  private messages = getMessages();
 
   async create(productDTO: createProductDTO) {
 
     const category = await this.categoryService.findOne(productDTO.categoryId)
 
     if (!category) {
-      throw new NotFoundException(this.messages.categoryNotFound);
+      throw new NotFoundException(messages.categoryNotFound);
     }
 
     const type = await this.typeService.findOne(productDTO.typeId)
 
     if (!type) {
-      throw new NotFoundException(this.messages.typeNotFound);
+      throw new NotFoundException(messages.typeNotFound);
     }
 
     const user  = await this.userService.findOne(productDTO.userId)
 
     if (!user) {
-      throw new NotFoundException(this.messages.userNotFound);
+      throw new NotFoundException(messages.userNotFound);
     }
 
     const product = new Product();
@@ -66,22 +67,22 @@ export class ProductService {
     });
 
     if (!existingProduct) {
-      throw new NotFoundException(this.messages.productNotFound);
+      throw new NotFoundException(messages.productNotFound);
     }
 
     const category = await this.categoryService.findOne(categoryId)
     if (!category) {
-      throw new NotFoundException(this.messages.categoryNotFound);
+      throw new NotFoundException(messages.categoryNotFound);
     }
 
     const type = await this.typeService.findOne(typeId)
     if (!type) {
-      throw new NotFoundException(this.messages.typeNotFound + type+ typeId);
+      throw new NotFoundException(messages.typeNotFound + type+ typeId);
     }
 
     const user  = await this.userService.findOne(userId)
     if (!user) {
-      throw new NotFoundException(this.messages.userNotFound);
+      throw new NotFoundException(messages.userNotFound);
     }
 
     Object.assign(
@@ -106,7 +107,7 @@ export class ProductService {
       const updatedProduct = await this.productRepository.save(existingProduct);
       return updatedProduct;
     } catch (error) {
-      throw new Error(this.messages.updateProductError);
+      throw new Error(messages.updateProductError);
     }
   }
 
@@ -118,7 +119,7 @@ export class ProductService {
   async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({ where: { id: id } });
     if (!product) {
-      throw new NotFoundException(this.messages.productNotFound);
+      throw new NotFoundException(messages.productNotFound);
     }
     return product;
   }
@@ -127,7 +128,7 @@ export class ProductService {
     const product = this.findOne(id);
 
     if (!product) {
-      throw new NotFoundException(this.messages.productNotFound);
+      throw new NotFoundException(messages.productNotFound);
     }
     await this.productRepository.delete(id);
     return product;

@@ -7,8 +7,9 @@ import { AuthService } from './auth.service';
 import { Auth } from './decorators/auth.decorator';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { getMessages } from 'src/messages/messages';
 import { EcommerceController } from '../admin/ecommerce.controller';
+
+import { messages } from 'src/messages/messages';
 
 @Controller('auth')
 export class AuthController extends EcommerceController {
@@ -16,7 +17,6 @@ export class AuthController extends EcommerceController {
     super();
   }
 
-  private messages = getMessages();
 
   @Post('register')
   async register(
@@ -25,7 +25,7 @@ export class AuthController extends EcommerceController {
   ) {
     try {
       const response = await this.authService.register(registerDto);
-      return this.createdResponse(res, this.messages.userCreated, response); 
+      return this.createdResponse(res, messages.userCreated, response); 
     } catch (error) {
       throw new HttpException(error.message , HttpStatus.BAD_REQUEST);
     }
@@ -38,7 +38,7 @@ export class AuthController extends EcommerceController {
   ) {
     try {
       const response = await this.authService.login(loginDto);
-      return this.successResponse(res, this.messages.successLogin, response); 
+      return this.successResponse(res, messages.successLogin, response); 
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
     }
@@ -52,7 +52,7 @@ export class AuthController extends EcommerceController {
   ) {
     try {
       const response = await this.authService.profile(user);
-      return this.successResponse(res, this.messages.success, response); 
+      return this.successResponse(res, messages.success, response); 
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -1,6 +1,6 @@
-import { getLanguageApp } from "src/config";
+import { config } from "src/config";
 
-export const messages = {
+const message = {
     outputEnglishMessages: {
         success: 'Success',
 
@@ -82,8 +82,6 @@ export const messages = {
 }
 
 
-export const getMessages = () => {
-    const languageModule: string = getLanguageApp();
-    return (languageModule == 'z')? messages.outputEnglishMessages: messages.outputSpanishMessages;
-}
+export const messages = (config.language == 'z')? message.outputEnglishMessages: message.outputSpanishMessages;
+
   
