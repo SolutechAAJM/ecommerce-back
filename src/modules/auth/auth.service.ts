@@ -28,7 +28,7 @@ export class AuthService {
       throw new BadRequestException(messages.userAlreadyExist);
     }
 
-    await this.usersService.create({
+    let oUser = await this.usersService.create({
       fullName,
       email,
       password: await bcryptjs.hash(password, 10),
@@ -40,10 +40,7 @@ export class AuthService {
       role: role,
     });
 
-    return {
-      fullName,
-      email,
-    };
+    return oUser;
   }
 
   async login({ email, password }: LoginDto) {
@@ -62,7 +59,7 @@ export class AuthService {
 
     return {
       token,
-      email,
+      user,
     };
   }
 

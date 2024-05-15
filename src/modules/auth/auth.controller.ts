@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Res, HttpException, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { Response } from 'express';
 import { ActiveUser } from '../common/decorators/active-user.decorator';
 import { UserActiveInterface } from '../common/interfaces/user-active.interface';
@@ -8,6 +8,9 @@ import { Auth } from './decorators/auth.decorator';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { EcommerceController } from '../admin/ecommerce.controller';
+
+import { validate } from 'class-validator';
+import { plainToClass } from 'class-transformer';
 
 import { messages } from 'src/messages/messages';
 
@@ -24,6 +27,12 @@ export class AuthController extends EcommerceController {
     @Res() res: Response, 
   ) {
     try {
+
+      const validationErrors = await validate(plainToClass(RegisterDto, registerDto));
+      if (validationErrors.length > 0) {
+        throw new BadRequestException(validationErrors.map(error => Object.values(error.constraints).join(', ')).join(', '));
+      }
+    
       const response = await this.authService.register(registerDto);
       return this.createdResponse(res, messages.userCreated, response); 
     } catch (error) {
@@ -37,6 +46,13 @@ export class AuthController extends EcommerceController {
     @Res() res: Response,
   ) {
     try {
+
+      
+      const validationErrors = await validate(plainToClass(LoginDto, loginDto));
+      if (validationErrors.length > 0) {
+        throw new BadRequestException(validationErrors.map(error => Object.values(error.constraints).join(', ')).join(', '));
+      }
+      
       const response = await this.authService.login(loginDto);
       return this.successResponse(res, messages.successLogin, response); 
     } catch (error) {
