@@ -12,10 +12,10 @@ import { Category } from '../category/entities/category.entity';
 import { Type } from '../types/entities/type.entity';
 import { ProductService } from '../products/product.service';
 import { User } from '../users/entities/user.entity';
-
+import { ArchiveController } from './archive.controller';
 @Module({
   imports: [TypeOrmModule.forFeature([ImageProduct, Product, Category, Type, User])], 
-  controllers: [], 
+  controllers: [ArchiveController], 
   providers: [ImageProductService, ProductService, CategoryService, TypeService, UsersService], 
   exports: [ImageProductService],
 })

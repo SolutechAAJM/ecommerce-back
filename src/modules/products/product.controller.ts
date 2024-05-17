@@ -64,6 +64,4 @@ export class ProductController extends EcommerceController {
       throw new HttpException(error.message || messages.productNotFound, HttpStatus.NOT_FOUND);
     }
   }
-
-
 }
