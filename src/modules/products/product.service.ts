@@ -1,5 +1,5 @@
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { createProductDTO } from './dto/create.dto';
@@ -13,6 +13,8 @@ import { UsersService } from '../users/users.service';
 import { ImageProductService } from '../archive/image.service';
 
 import { messages } from 'src/messages/messages';
+
+import { Pool } from 'pg';
 @Injectable()
 export class ProductService {
   constructor(
@@ -22,6 +24,7 @@ export class ProductService {
     private readonly typeService: TypeService,
     private readonly userService: UsersService,
     // private readonly imageProductService: ImageProductService
+    @Inject('PG_CONNECTION') private pool: Pool,
 
   ) { }
 
@@ -40,7 +43,7 @@ export class ProductService {
       throw new NotFoundException(messages.typeNotFound);
     }
 
-    const user  = await this.userService.findOne(productDTO.userId)
+    const user = await this.userService.findOne(productDTO.userId)
 
     if (!user) {
       throw new NotFoundException(messages.userNotFound);
@@ -53,8 +56,8 @@ export class ProductService {
     product.stock = productDTO.stock;
     product.characteristics = productDTO.characteristics;
     product.isOffer = productDTO.isOffer;
-    product.dateCreation = new Date(productDTO.dateCreation); 
-    product.lastModify = new Date(productDTO.lastModify); 
+    product.dateCreation = new Date(productDTO.dateCreation);
+    product.lastModify = new Date(productDTO.lastModify);
     product.type = type
     product.category = category;
     product.user = user;
@@ -66,7 +69,7 @@ export class ProductService {
     //   let instaceImageDTO = new InstanceImageProductDTO;
     //   instaceImageDTO.url = productDTO.urlImages;
     //   instaceImageDTO.idProduct = productSaved.id;
-  
+
     //   const imagesSaved = await this.imageProductService.instanceImageProduct(instaceImageDTO)
     //   const response = {
     //     productSaved: productSaved, 
@@ -74,12 +77,12 @@ export class ProductService {
     //   }
     //   return response;
     // }
-   
+
     const response = {
-      productSaved: productSaved, 
+      productSaved: productSaved,
       imageSaved: []
     }
-    
+
     return response;
   }
 
@@ -101,10 +104,10 @@ export class ProductService {
 
     const type = await this.typeService.findOne(typeId)
     if (!type) {
-      throw new NotFoundException(messages.typeNotFound + type+ typeId);
+      throw new NotFoundException(messages.typeNotFound + type + typeId);
     }
 
-    const user  = await this.userService.findOne(userId)
+    const user = await this.userService.findOne(userId)
     if (!user) {
       throw new NotFoundException(messages.userNotFound);
     }
@@ -136,16 +139,61 @@ export class ProductService {
   }
 
 
-  async findAll(): Promise<Product[]> {
-    return this.productRepository.find();
+  async findAll(): Promise<any> {
+    const client = await this.pool.connect();
+    try {
+      const products = await this.productRepository.find();
+
+      const productIds: Array<string> = products.map(product => `${product.id}`);
+
+      const results = await client.query(
+        `SELECT * FROM image_product WHERE "productId" = ANY($1::int[])`,
+        [productIds.map(id => parseInt(id))]
+      );
+
+      const imagesByProductId: Record<string, Array<any>> = {};
+
+      results.rows.forEach((image) => {
+        const productId = image.productId;
+        if (!imagesByProductId[productId]) {
+          imagesByProductId[productId] = [];
+        }
+        imagesByProductId[productId].push(image);
+      });
+
+      products.forEach((product) => {
+        product.images = imagesByProductId[product.id] || [];
+      });
+
+      return products;
+    } finally {
+      client.release();
+    }
+
+
   }
 
   async findOne(id: number): Promise<Product> {
-    const product = await this.productRepository.findOne({ where: { id: id } });
-    if (!product) {
-      throw new NotFoundException(messages.productNotFound);
+
+    const client = await this.pool.connect();
+
+    try {
+      const product = await this.productRepository.findOne({ where: { id: id } });
+      if (!product) {
+        throw new NotFoundException(messages.productNotFound);
+      }
+      const results = await client.query(
+        `SELECT * FROM image_product WHERE "productId" = $1`,
+        [id]
+      );
+      product.images = results.rows;
+      return product;
+    
+    } catch (error) {
+      throw error;
+    } finally {
+      client.release();
     }
-    return product;
   }
 
   async remove(id: number) {

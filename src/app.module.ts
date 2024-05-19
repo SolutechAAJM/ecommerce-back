@@ -7,6 +7,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { TypeModule } from './modules/types/type.module';
 import { ShoppingModule } from './modules/shopping/shopping.module';
 import { ArchiveModule } from './modules/archive/archive.module';
+import { DatabaseModule } from './modules/database/database.module';
 
 @Module({
   imports: [
@@ -40,7 +41,8 @@ import { ArchiveModule } from './modules/archive/archive.module';
     CategoryModule,
     TypeModule,
     ShoppingModule,
-    ArchiveModule
+    ArchiveModule,
+    DatabaseModule
   ],
   controllers: [],
   providers: [],
