@@ -3,6 +3,7 @@ import { config } from "src/config";
 const message = {
     outputEnglishMessages: {
         success: 'Success',
+        error: "Error",
 
         userCreated: 'User created correctly',
         successLogin: 'Success login',
@@ -59,11 +60,17 @@ const message = {
         creditPointsRequired: 'Credit points is required',
         roleString: 'Invalid role data type',
         roleRequired: 'Role is required',
+
+        typeSearchNoSupported: 'Search type no supported',
+        priceRangeInvalid: 'Invalid price range',
+
         
     },
 
     outputSpanishMessages: {
         success: 'Success',
+        error: "Error",
+
 
         userCreated: 'Usuario creado correctamente',
         successLogin: 'Inicio de sesión exitoso',
@@ -124,6 +131,11 @@ const message = {
         creditPointsRequired: 'Los puntos de crédito son obligatorios',
         roleString: 'Tipo de dato de rol inválido',
         roleRequired: 'El rol es obligatorio',
+
+
+
+        typeSearchNoSupported: 'Tipo de búsqueda no soportado',
+        priceRangeInvalid: 'Rango de precios invalido',
 
     }
 }

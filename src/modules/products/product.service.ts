@@ -1,9 +1,11 @@
 
 import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like, Between, MoreThanOrEqual } from 'typeorm';
+
 import { createProductDTO } from './dto/create.dto';
 import { InstanceImageProductDTO } from '../archive/dto/images.dto';
+import { SearchDTO } from './dto/search.dto';
 
 import { Product } from './entities/product.entity';
 import { updateProductDTO } from './dto/update.dto';
@@ -14,7 +16,9 @@ import { ImageProductService } from '../archive/image.service';
 
 import { messages } from 'src/messages/messages';
 
+import { SearchType } from './enum/search.enum';
 import { Pool } from 'pg';
+
 @Injectable()
 export class ProductService {
   constructor(
@@ -188,7 +192,7 @@ export class ProductService {
       );
       product.images = results.rows;
       return product;
-    
+
     } catch (error) {
       throw error;
     } finally {
@@ -204,6 +208,62 @@ export class ProductService {
     }
     await this.productRepository.delete(id);
     return product;
+  }
+
+
+  async filterProducts(dataFilter: SearchDTO): Promise<Product[]> {
+    const { typeSearch, textSearch, idType, idCategory, minPrice, maxPrice } = dataFilter;
+
+    let results: any;
+
+    switch (typeSearch) {
+      case SearchType.ByName:
+        results = await this.productRepository.find({
+          where: { name: Like(`%${textSearch}%`) },
+        });
+        break;
+
+      case SearchType.ByCategory:
+        if (!idCategory) throw new Error(messages.categoryNotFound);
+        const category = await this.categoryService.findOne(idCategory);
+        if (!category) throw new Error(messages.categoryNotFound);
+
+        results = await this.productRepository.find({
+          relations: ['category'],
+          where: { category: { id: idCategory } },
+        });
+        break;
+
+      case SearchType.ByType:
+        if (!idType) throw new Error(messages.typeNotFound);
+        const type = await this.typeService.findOne(idType);
+        if (!type) throw new Error(messages.typeNotFound);
+
+        results = await this.productRepository.find({
+          relations: ['type'],
+          where: { type: { id: idType } },
+        });
+        break;
+
+      case SearchType.ByPriceRange:
+        if (minPrice === undefined || maxPrice === undefined) throw new Error(messages.priceRangeInvalid);
+        results = await this.productRepository.find({
+          where: { price: Between(minPrice, maxPrice) },
+        });
+        break;
+
+      // case SearchType.ByRating:
+      //     const rating = parseFloat(textSearch);
+      //     results = await this.productRepository.find({
+      //         where: { rating: MoreThanOrEqual(rating) },
+      //     });
+      //     break;
+
+      default:
+        throw new Error(messages.typeSearchNoSupported);
+    }
+
+    return results;
   }
 
 }

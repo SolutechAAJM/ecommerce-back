@@ -1,8 +1,10 @@
-import { Body, Controller, Post, Get, Res, HttpException, HttpStatus, Param } from '@nestjs/common';
+import { Body, Controller, Post, Get, Res, HttpException, HttpStatus, Param, Query, UsePipes, ValidationPipe, } from '@nestjs/common';
 import { Response } from 'express';
 import { ProductService } from './product.service';
 import { createProductDTO } from './dto/create.dto';
 import { updateProductDTO } from './dto/update.dto';
+import { SearchDTO } from './dto/search.dto';
+
 import { EcommerceController } from '../admin/ecommerce.controller';
 
 import { messages } from 'src/messages/messages';
@@ -56,12 +58,25 @@ export class ProductController extends EcommerceController {
   }
 
   @Post(':id/delete')
-  async remove(@Param('id') id: number, @Res() res: Response ) {
+  async remove(@Param('id') id: number, @Res() res: Response) {
     try {
       const response = await this.productService.remove(+id);
       return this.successResponse(res, messages.deletedProduct, response);
     } catch (error) {
       throw new HttpException(error.message || messages.productNotFound, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @Post('search')
+  async searchProducts(
+    @Body() filterDTO: SearchDTO,
+    @Res() res: Response,
+  ) {
+    try {
+      const response = await this.productService.filterProducts(filterDTO);
+      return this.createdResponse(res, messages.success, response);
+    } catch (error) {
+      throw new HttpException(error.message || messages.error, HttpStatus.NOT_FOUND);
     }
   }
 }
