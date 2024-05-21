@@ -34,7 +34,6 @@ import { DatabaseModule } from './modules/database/database.module';
       // autoLoadEntities: true,
       // synchronize: true,
     }),
-
     AuthModule,
     UsersModule,
     ProductModule,
