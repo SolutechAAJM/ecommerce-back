@@ -47,7 +47,6 @@ export class AuthController extends EcommerceController {
   ) {
     try {
 
-      
       const validationErrors = await validate(plainToClass(LoginDto, loginDto));
       if (validationErrors.length > 0) {
         throw new BadRequestException(validationErrors.map(error => Object.values(error.constraints).join(', ')).join(', '));

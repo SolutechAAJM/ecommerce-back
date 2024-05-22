@@ -11,6 +11,5 @@ export class LoginDto {
 
   @Transform(({ value }) => value.trim())
   @IsString()
-  @MinLength(6,{message: messages.passwordMinLength})
   password: string;
 }

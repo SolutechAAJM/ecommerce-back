@@ -39,13 +39,13 @@ export class RegisterDto {
   isActive: boolean;
 
   @Transform(({ value }) => value.trim())
-  @IsString({ message: messages.phoneString })
-  @IsNotEmpty({ message: messages.phoneRequired })
+  // @IsString({ message: messages.phoneString })
+  // @IsNotEmpty({ message: messages.phoneRequired })
   phone: string;
 
   @Transform(({ value }) => value.trim())
-  @IsString({ message: messages.addressString })
-  @IsNotEmpty({ message: messages.addressRequired })
+  // @IsString({ message: messages.addressString })
+  // @IsNotEmpty({ message: messages.addressRequired })
   address: string;
 
   @IsNumber({}, { message: messages.creditPointsNumber })
