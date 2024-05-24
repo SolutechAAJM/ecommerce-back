@@ -64,6 +64,10 @@ const message = {
         typeSearchNoSupported: 'Search type no supported',
         priceRangeInvalid: 'Invalid price range',
 
+        orderNotFound: 'Order not found',
+        orderCreated: 'Order saved successfully',
+        orderDeleted: 'Order deleted successfully',
+
         
     },
 
@@ -132,10 +136,13 @@ const message = {
         roleString: 'Tipo de dato de rol inválido',
         roleRequired: 'El rol es obligatorio',
 
-
-
         typeSearchNoSupported: 'Tipo de búsqueda no soportado',
         priceRangeInvalid: 'Rango de precios invalido',
+
+        orderNotFound: 'Orden no encontrada',
+        orderDeleted: 'Orden elimina correctamente',
+        orderCreated: 'Orden creada correctamente',
+
 
     }
 }
