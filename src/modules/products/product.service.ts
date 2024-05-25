@@ -263,6 +263,30 @@ export class ProductService {
         throw new Error(messages.typeSearchNoSupported);
     }
 
+    let idProducts: Array<any> = [];
+
+    results.forEach(product => {
+      idProducts.push(product.id);
+    });
+
+    const client = await this.pool.connect();
+    const query = await client.query(
+      `SELECT * FROM image_product WHERE "productId" = ANY($1::int[])`,
+      [idProducts]  
+    );
+
+    const imagesArray = query.rows;
+
+    results.forEach((product) => {
+      let images: Array<any> = [];
+      imagesArray.forEach(image => {
+        if (image.productId == product.id) {
+          images.push(image);
+        }
+      });
+      product.images = images;
+    })
+
     return results;
   }
 

@@ -8,6 +8,7 @@ import { Category } from '../category/entities/category.entity';
 import { Type } from '../types/entities/type.entity';
 import { ShoppingCart } from './entities/shoppingcart.entity';
 import { Order } from './entities/order.entity';
+import { OrderDetail } from './entities/orderDetails.entity';
 
 
 import { ProductService } from '../products/product.service';
@@ -22,7 +23,7 @@ import { OrderController } from './order.controller';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ShoppingCart, CartItem, User, Product, Category, Type, Order])], 
+  imports: [TypeOrmModule.forFeature([ShoppingCart, CartItem, User, Product, Category, Type, Order, OrderDetail])], 
   controllers: [ShoppingCartController, OrderController], 
   providers: [ShoppingCartService, ProductService, UsersService, CategoryService, TypeService, OrderService], 
   exports: [ShoppingCartService, OrderService],

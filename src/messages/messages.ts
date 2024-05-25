@@ -67,6 +67,7 @@ const message = {
         orderNotFound: 'Order not found',
         orderCreated: 'Order saved successfully',
         orderDeleted: 'Order deleted successfully',
+        ErrorCreatingOrder: 'Error creating the order',
 
         
     },
@@ -112,7 +113,6 @@ const message = {
         itemCartCreated: 'Se añadio el producto al carrito correctamente',
 
 
-
         //validations register DTO
 
         fullNameString: 'Tipo de dato de nombre completo inválido',
@@ -140,13 +140,12 @@ const message = {
         priceRangeInvalid: 'Rango de precios invalido',
 
         orderNotFound: 'Orden no encontrada',
-        orderDeleted: 'Orden elimina correctamente',
+        orderDeleted: 'Orden eliminada correctamente',
         orderCreated: 'Orden creada correctamente',
-
+        ErrorCreatingOrder: 'Error creando la orden',
 
     }
 }
-
 
 export const messages = (config.language == 'z')? message.outputEnglishMessages: message.outputSpanishMessages;
 

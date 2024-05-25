@@ -1,5 +1,5 @@
 
-import { Controller, Get, Post,  HttpException , Body, Param, HttpStatus, Res} from '@nestjs/common';
+import { Controller, Get, Post,  HttpException , Body, Param, HttpStatus, Res, Query} from '@nestjs/common';
 import { Response } from 'express';
 import { EcommerceController } from '../admin/ecommerce.controller';
 
@@ -43,4 +43,19 @@ export class OrderController extends EcommerceController
     }
   }
 
+
+  @Get('/')
+  async getOrdersByIdUser(
+    @Query('iduser') idUser: number,
+    @Res() res: Response
+  )
+  {
+    try{
+      const response = await this.orderService.findOrderByIdUser(idUser)
+      return this.createdResponse(res, messages.success, response);
+    }
+    catch(error){
+      throw new HttpException(error.message || messages.userNotFound, HttpStatus.NOT_FOUND);
+    }
+  }
 }

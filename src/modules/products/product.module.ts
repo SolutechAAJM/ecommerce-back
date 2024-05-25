@@ -11,9 +11,10 @@ import { TypeService } from '../types/type.service';
 import { UsersService } from '../users/users.service';
 import { ImageProductService } from '../archive/image.service';
 import { ImageProduct } from '../archive/entities/image.entity';
+import { OrderDetail } from '../shopping/entities/orderDetails.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product, User, Type, Category, ImageProduct])],
+  imports: [TypeOrmModule.forFeature([Product, User, Type, Category, ImageProduct, OrderDetail])],
   controllers: [ProductController],
   providers: [ProductService, CategoryService, TypeService, UsersService, ImageProductService],
   exports: [ProductService],

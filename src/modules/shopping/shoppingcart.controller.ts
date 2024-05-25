@@ -58,10 +58,4 @@ export class ShoppingCartController extends EcommerceController
 
   }
   
-
-
-
-
-
-  
 }
