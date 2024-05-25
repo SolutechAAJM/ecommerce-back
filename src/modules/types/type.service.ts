@@ -27,6 +27,8 @@ export class TypeService {
         const type = new Type();
         type.name = createTypeDto.name;
         type.description = createTypeDto.description;
+        type.urlimage = createTypeDto.urlimage;
+
         return await this.typeRepository.save(type);
     }
 
@@ -43,6 +45,9 @@ export class TypeService {
         }
         if (updateTypeDto.active !== undefined) {
             type.active = updateTypeDto.active;
+        }
+        if (updateTypeDto.urlimage) {
+            type.urlimage = updateTypeDto.urlimage;
         }
         return this.typeRepository.save(type);
     }

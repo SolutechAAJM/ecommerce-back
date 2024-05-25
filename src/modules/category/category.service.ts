@@ -31,6 +31,7 @@ export class CategoryService {
         const category = new Category();
         category.name = createCategoryDto.name;
         category.description = createCategoryDto.description;
+        category.urlimage = createCategoryDto.urlimage;
         return this.categoryRepository.save(category);
     }
 
@@ -49,6 +50,9 @@ export class CategoryService {
         }
         if (updateCategoryDto.active !== undefined) {
             category.active = updateCategoryDto.active;
+        }
+        if (updateCategoryDto.urlimage) {
+            category.urlimage = updateCategoryDto.urlimage;
         }
         return this.categoryRepository.save(category);
     }

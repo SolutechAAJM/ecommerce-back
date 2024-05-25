@@ -12,6 +12,9 @@ export class Type {
   @Column({ nullable: true })
   description: string;
 
+  @Column({ nullable: true })
+  urlimage: string;
+
   @Column({ default: true, nullable: false })
   active: boolean;
 
