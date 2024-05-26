@@ -54,7 +54,6 @@ export class TypeService {
 
     async remove(id: number) {
         const type = await this.findOne(id);
-
         if (!type) {
            throw new NotFoundException(messages.typeNotFound);
         }
