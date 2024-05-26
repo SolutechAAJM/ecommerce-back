@@ -57,6 +57,7 @@ export class TypeService {
         if (!type) {
            throw new NotFoundException(messages.typeNotFound);
         }
+        
         await this.typeRepository.delete(id);
         return type;
     }
