@@ -19,7 +19,7 @@ export class ShoppingCartController extends EcommerceController
   @Get(':iduser')
   async findByIdUser(@Param('iduser') id: number, @Res() res: Response) {
     try {
-      const response = await this.shoppingCartService.findOne(+id);
+      const response = await this.shoppingCartService.findOneByUserId(id);
       return this.successResponse(res, messages.success, response);
     } catch (error) {
       throw new HttpException(error.message || messages.productNotFound, HttpStatus.NOT_FOUND);
@@ -53,7 +53,7 @@ export class ShoppingCartController extends EcommerceController
       return this.createdResponse(res, messages.itemCartCreated, response);
     }
     catch(error){
-      throw new HttpException(error.message || messages.shoppingCartNotFound, HttpStatus.NOT_FOUND);
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
 
   }
