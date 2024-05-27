@@ -74,9 +74,19 @@ export class ShoppingCartController extends EcommerceController
     catch(error){
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
-
   }
 
-  
+  @Post('deleteitem')
+  async deleteCart(
+    @Body('id') id: number,
+    @Res() res: Response,
+  ) {
+    try {
+      const response = await this.shoppingCartService.deleteCartItem(id);
+      return this.successResponse(res, messages.itemCartCreated, response);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
+  }
   
 }

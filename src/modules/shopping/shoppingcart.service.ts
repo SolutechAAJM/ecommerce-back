@@ -131,4 +131,14 @@ export class ShoppingCartService {
             client.release();
         }
     }
+
+    async deleteCartItem(id: number) {
+        let item = await this.cartItemRepository.findOne({ where: { id: id } }); 
+        if (!item) {
+          throw new Error(messages.shoppingCartNotFound);
+        }
+        await this.cartItemRepository.delete(id);
+        return item;
+      }
+      
 }
