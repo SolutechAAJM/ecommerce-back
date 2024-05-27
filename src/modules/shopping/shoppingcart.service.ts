@@ -42,6 +42,7 @@ export class ShoppingCartService {
             .createQueryBuilder('shopping_cart')
             .leftJoinAndSelect('shopping_cart.items', 'cartItem')
             .leftJoinAndSelect('cartItem.product', 'product')
+            .leftJoinAndSelect('product.images', 'images')
             .where('shopping_cart.user.id = :userId', { userId })
             .getOne();
 
@@ -98,31 +99,31 @@ export class ShoppingCartService {
 
     async modify(dto: modifyDto) {
         const client = await this.pool.connect();
-    
+
         try {
 
             const { rows } = await client.query(
                 'SELECT quantity FROM cart_item WHERE id = $1',
                 [dto.id]
             );
-    
+
             if (rows.length === 0) {
                 throw new Error('Item not found');
             }
-    
+
             let quantity = 0;
-            if(dto.param == "sumar"){
-                quantity  = rows[0].quantity + 1;
+            if (dto.param == "sumar") {
+                quantity = rows[0].quantity + 1;
             }
             else {
                 quantity = rows[0].quantity - 1;
             }
-         
+
             await client.query(
                 'UPDATE cart_item SET quantity = $1 WHERE id = $2',
                 [quantity, dto.id]
             );
-    
+
         } catch (error) {
             console.error('Error modifying quantity:', error);
             throw error;
